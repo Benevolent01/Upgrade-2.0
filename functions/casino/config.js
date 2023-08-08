@@ -1,4 +1,4 @@
-let win_less_than =  0.6;
+let win_less_than = 0.6;
 let jackpotChance = 0.01;
 let jackpotMultiplier = 500;
 
@@ -29,24 +29,21 @@ module.exports = {
 
     // 1% chance
     let jackpot = Math.random() <= jackpotChance;
-    
+
     let chance = Math.random();
 
     // x: possibility won, y: multiplier
-    let luck = {x: null, y: null};
+    let luck = { x: null, y: null };
 
     if (chance <= first_possibility) {
       luck.x = first_possibility;
-      luck.y = first_pos_multiplier
-
+      luck.y = first_pos_multiplier;
     } else if (chance <= second_possibility) {
       luck.x = second_possibility - first_possibility;
       luck.y = second_pos_multiplier;
-
     } else if (chance <= third_possibility) {
       luck.x = third_possibility - second_possibility;
       luck.y = third_pos_multiplier;
-
     }
 
     if (jackpot) {
@@ -56,8 +53,17 @@ module.exports = {
       luck.y = jackpotMultiplier;
     }
 
-    let endAmount = winOrLose ? (amount * luck.y * 1) : ((amount * luck.y * -1) / lose_cut_divider);
+    let endAmount = winOrLose
+      ? amount * luck.y * 1
+      : (amount * luck.y * -1) / lose_cut_divider;
 
-    return {possibility: luck.x, mul: luck.y, win: winOrLose, cut: lose_cut_divider, endAmount, jackpot};
-  }
-}
+    return {
+      possibility: luck.x,
+      mul: luck.y,
+      win: winOrLose,
+      cut: lose_cut_divider,
+      endAmount,
+      jackpot,
+    };
+  },
+};

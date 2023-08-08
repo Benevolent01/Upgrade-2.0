@@ -7,7 +7,7 @@ let client = new MongoClient(uri, {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
-  }
+  },
 });
 
 async function connectToMongoDB() {
@@ -15,7 +15,7 @@ async function connectToMongoDB() {
     await client.connect();
     console.log("You successfully connected to MongoDB!");
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
 }
 

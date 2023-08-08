@@ -1,23 +1,26 @@
 module.exports = {
   // dnd, idle, invisible, online
   BOT_PRESENCE_STATUS: "online",
-  
+
   // any string
   BOT_ACTIVITY_DESC: "music for this server",
 
   // COMPETING, LISTENING, PLAYING, STREAMING, WATCHING
   BOT_ACTIVITY_TYPE: "PLAYING",
-  
+
   isValidInteraction: (interaction) => {
-    if (!interaction.isChatInputCommand() || !interaction.guildId || interaction.user.bot) {
+    if (
+      !interaction.isChatInputCommand() ||
+      !interaction.guildId ||
+      interaction.user.bot
+    ) {
       return false;
     }
     return true;
   },
 
   isValidMessage: (msg) => {
-    if (!msg.guildId || msg.author.bot)
-      return false;
+    if (!msg.guildId || msg.author.bot) return false;
     return true;
   },
 

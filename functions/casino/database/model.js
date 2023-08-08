@@ -1,4 +1,4 @@
-let { MongoClient, ServerApiVersion, } = require("mongodb");
+let { MongoClient, ServerApiVersion } = require("mongodb");
 let { dbName, collName } = require("../config");
 
 let uri = process.env.MONGODB_CRED;
@@ -8,26 +8,27 @@ let client = new MongoClient(uri, {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
-  }
+  },
 });
 
 let currentDB = dbName;
 let collectionName = collName;
 
 async function handleCollection() {
-
   try {
-    let collectionExists = (await client.db(currentDB).listCollections().toArray()).some(doc => doc.name === collectionName);
-    
+    let collectionExists = (
+      await client.db(currentDB).listCollections().toArray()
+    ).some((doc) => doc.name === collectionName);
+
     if (collectionExists) {
-      console.log("Collection already exists, skipping..")
+      console.log("Collection already exists, skipping..");
       return;
     }
-    
+
     let db2 = client.db(currentDB);
-    
+
     // if additionalProperties: false is passed, add _id to properties & bson aliases
-    
+
     await db2.createCollection(collectionName, {
       validator: {
         $jsonSchema: {
@@ -42,9 +43,9 @@ async function handleCollection() {
             dateRegistered: { bsonType: "string" },
           },
           additionalProperties: false,
-        }
-      }
-    })
+        },
+      },
+    });
 
     console.log("Collection successfully created!");
   } catch (e) {

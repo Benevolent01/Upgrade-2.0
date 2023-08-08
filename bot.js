@@ -1,5 +1,5 @@
 require("dotenv").config();
-let { Client, EmbedBuilder, Collection, Embed } = require("discord.js");
+let { Client } = require("discord.js");
 let { GatewayIntentBits } = require("discord-api-types/v10");
 
 let client = new Client({
@@ -21,13 +21,16 @@ let client = new Client({
 let EventEmitter = require("events");
 let emitter = new EventEmitter();
 emitter.setMaxListeners(30);
-let { SlashCommandBuilder } = require("@discordjs/builders");
 let { REST } = require("@discordjs/rest");
 let { Routes } = require("discord-api-types/v9");
 
 // ---------------------------------------------- //
 let slashCommands = require("./functions/slash-commands");
-const { BOT_PRESENCE_STATUS, BOT_ACTIVITY_DESC, BOT_ACTIVITY_TYPE, isValidInteraction } = require("./functions/all-config");
+const {
+  BOT_PRESENCE_STATUS,
+  BOT_ACTIVITY_DESC,
+  BOT_ACTIVITY_TYPE,
+} = require("./functions/all-config");
 const moderateChat = require("./functions/chat-moderation");
 const leagueOpGG = require("./functions/league-related/op-gg");
 const masteriesGG = require("./functions/league-related/masteries-gg");
@@ -36,7 +39,6 @@ const handleBet = require("./functions/casino/bet");
 const balanceReset = require("./functions/casino/bal-reset");
 const showBalance = require("./functions/casino/my-bal");
 const handleCollection = require("./functions/casino/database/model");
-const { log } = require("console");
 
 // --------------------- On ready ---------------------- //
 
@@ -51,11 +53,14 @@ client.on("ready", async () => {
   for (let obj in slashCommands) {
     commands.push(slashCommands[obj]);
   }
-  commands.map(command => command.toJSON());
+  commands.map((command) => command.toJSON());
 
   rest.put(
-    Routes.applicationGuildCommands(process.env.BOT_ID, process.env.MAIN_GUILD_ID),
-    { body: commands },
+    Routes.applicationGuildCommands(
+      process.env.BOT_ID,
+      process.env.MAIN_GUILD_ID
+    ),
+    { body: commands }
   );
 });
 
@@ -73,27 +78,31 @@ client.on("interactionCreate", async (interaction) => leagueOpGG(interaction));
 client.on("interactionCreate", async (interaction) => masteriesGG(interaction));
 
 // Get champ quote
-client.on("interactionCreate", async (interaction) => getChampQuote(interaction));
+client.on("interactionCreate", async (interaction) =>
+  getChampQuote(interaction)
+);
 
 // --------------------- Casino ---------------------- //
 
-if (0) {
+let initializingCollection = true;
+if (initializingCollection) {
   handleCollection();
 }
 
 client.on("interactionCreate", async (interaction) => handleBet(interaction));
 
-client.on("interactionCreate", async (interaction) => balanceReset(interaction));
+client.on("interactionCreate", async (interaction) =>
+  balanceReset(interaction)
+);
 
 client.on("interactionCreate", async (interaction) => showBalance(interaction));
 
 // --------------------- Hangman ---------------------- //
 
-client.on("messageCreate", msg => {
-})
+client.on("messageCreate", () => {});
 
 //HangMan
-client.on("interactionCreate", async (interaction) => {
+client.on("interactionCreate", async () => {
   /*
   add
    - initialize the queue
@@ -116,17 +125,12 @@ client.on("interactionCreate", async (interaction) => {
   hard: show 1 random character, 10 lives
 
   hangmanQ {
-    id: serverId,
+    id: serverId, 
     word_to_appear: "",
     lives: Number(),
     realWord: "",
   }
   */
-})
+});
 
 client.login(process.env.DISCORD_BOT_TOKEN);
-
-
-
-
-

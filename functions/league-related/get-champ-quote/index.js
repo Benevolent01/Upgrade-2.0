@@ -4,8 +4,10 @@ let { slash_cq } = require("../../slash-commands/config");
 let { filterChampQuote, championsHandleCase } = require("../config");
 
 async function getChampQuote(interaction) {
-
-  if (!isValidInteraction(interaction) || interaction.commandName !== slash_cq) {
+  if (
+    !isValidInteraction(interaction) ||
+    interaction.commandName !== slash_cq
+  ) {
     return;
   }
 
@@ -15,7 +17,8 @@ async function getChampQuote(interaction) {
   let champQuery = interaction.options.data[0].value.toLowerCase();
 
   if (!championsHandleCase.has(champQuery)) {
-    let msg = '**' + "That champion doesn't exist, or is spelled otherwise!" + '**';
+    let msg =
+      "**" + "That champion doesn't exist, or is spelled otherwise!" + "**";
     return await interaction.editReply(msg);
   }
 
@@ -28,20 +31,19 @@ async function getChampQuote(interaction) {
     let html = await r.text();
     let $ = cheerio.load(html);
     let quotesArray = [];
-    $("i").each(function() {
-      quotesArray.push($(this).text())
-    })
+    $("i").each(function () {
+      quotesArray.push($(this).text());
+    });
 
     quotesArray = filterChampQuote(quotesArray, correctChampName);
     let randomIdx = () => Math.floor(Math.random() * quotesArray.length);
 
-    let msg = '``' + quotesArray[randomIdx()] + '``';
+    let msg = "``" + quotesArray[randomIdx()] + "``";
     await interaction.editReply(msg);
-
   } catch (e) {
     await interaction.editReply("An error occured..");
     console.log(e);
   }
-} 
+}
 
 module.exports = getChampQuote;

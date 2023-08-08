@@ -1,14 +1,14 @@
+let IDS_that_should_not_be_banned = [];
+
 module.exports = {
   // hours
   timeout_duration: 1000 * 60 * 60,
 
-  IDS_that_should_not_be_banned: [],
-
   shouldProceedWithBan: (interaction) => {
-    let id_arr = this.IDS_that_should_not_be_banned ??= [];
+    let id_arr = (IDS_that_should_not_be_banned ??= []);
     for (let i = 0; i < id_arr.length; i++) {
       if (interaction.member.roles.cache.has(id_arr[i]));
-        return false;
+      return false;
     }
     return true;
   },
@@ -17,8 +17,7 @@ module.exports = {
     // returning to for each won't return to function call lol
     let words = msg.content.split(" ");
     for (let i = 0; i < words.length; i++) {
-      if (mp.get(words[i]))
-        return true;
+      if (mp.get(words[i])) return true;
     }
     return false;
   },

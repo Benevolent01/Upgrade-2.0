@@ -19,19 +19,16 @@ let clientDb = new MongoClient(uri, {
   },
 });
 
-async function handleBet(interaction) {
-  if (
-    !isValidInteraction(interaction) ||
-    interaction.commandName !== slash_bet
-  ) {
+async function handleBet(i) {
+  if (!isValidInteraction(i) || i.commandName !== slash_bet) {
     return;
   }
 
-  await interaction.deferReply();
+  await i.deferReply();
 
-  let name = interaction.user.username;
+  let name = i.user.username;
 
-  let amount = parseInt(interaction.options.data[0].value);
+  let amount = parseInt(i.options.data[0].value);
 
   try {
     // name (string), money (int), isAdmin (boolean), dateRegistered (string),
@@ -49,22 +46,22 @@ async function handleBet(interaction) {
       let embed = new EmbedBuilder();
       embed
         .setColor("Random")
-        .setTitle(`${interaction.guild.name}'s Casino`)
-        .setThumbnail(interaction.member.displayAvatarURL())
+        .setTitle(`${i.guild.name}'s Casino`)
+        .setThumbnail(i.member.displayAvatarURL())
         .addFields({
-          name: `Welcome to ${interaction.guild.name}'s casino!`,
+          name: `Welcome to ${i.guild.name}'s casino!`,
           value: `Your cash now is set to *${initial_amount_ofmoney}$*`,
           inline: true,
         })
-        .setFooter({ text: `${interaction.guild.name}, inc.` });
+        .setFooter({ text: `${i.guild.name}, inc.` });
 
-      return await interaction.editReply({ embeds: [embed] });
+      return await i.editReply({ embeds: [embed] });
     }
 
     let cashNow = parseInt(findUser.money);
 
     if (cashNow < amount) {
-      return await interaction.editReply(
+      return await i.editReply(
         "`You don't have that much money to make this bet! Reset your balance and try again!`"
       );
     }
@@ -74,15 +71,15 @@ async function handleBet(interaction) {
 
     // console.log(possibility, mul, win, cut, endAmount);
 
-    let newBalance = cashNow + endAmount;
+    let newBalance = Number(cashNow + endAmount);
 
     await currColl.findOneAndUpdate({ name }, { $set: { money: newBalance } });
 
     let embed = new EmbedBuilder();
     embed
       .setColor("Random")
-      .setTitle(`${interaction.guild.name}'s Casino`)
-      .setThumbnail(interaction.member.displayAvatarURL())
+      .setTitle(`${i.guild.name}'s Casino`)
+      .setThumbnail(i.member.displayAvatarURL())
       .addFields(
         { name: `Previous Balance`, value: `${cashNow}$`, inline: true },
         {
@@ -108,12 +105,12 @@ async function handleBet(interaction) {
           inline: true,
         }
       )
-      .setFooter({ text: `${interaction.guild.name}, inc.` })
+      .setFooter({ text: `${i.guild.name}, inc.` })
       .setTimestamp();
 
-    await interaction.editReply({ embeds: [embed] });
+    await i.editReply({ embeds: [embed] });
   } catch (e) {
-    await interaction.editReply("There was an error betting..");
+    await i.editReply("There was an error betting..");
     console.log(e);
   }
 }

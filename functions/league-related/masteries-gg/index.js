@@ -3,17 +3,14 @@ let { isValidInteraction } = require("../../all-config");
 let { slash_mast_gg } = require("../../slash-commands/config");
 let { modifyID, riotHeaders } = require("../config");
 
-async function masteriesGG(interaction) {
-  if (
-    !isValidInteraction(interaction) ||
-    interaction.commandName !== slash_mast_gg
-  ) {
+async function masteriesGG(i) {
+  if (!isValidInteraction(i) || i.commandName !== slash_mast_gg) {
     return;
   }
 
-  await interaction.deferReply();
-  let summonerName = interaction.options.data[0].value.toLocaleLowerCase();
-  let server = interaction.options.data[1].value.toLocaleLowerCase();
+  await i.deferReply();
+  let summonerName = i.options.data[0].value.toLocaleLowerCase();
+  let server = i.options.data[1].value.toLocaleLowerCase();
   let headers = riotHeaders();
 
   try {
@@ -29,8 +26,8 @@ async function masteriesGG(interaction) {
 
     // if not id, then don't look further
     if (!id) {
-      return interaction.editReply(
-        `**${interaction.user.username} I couldn't find a summoner with such name!**`
+      return i.editReply(
+        `**${i.user.username} I couldn't find a summoner with such name!**`
       );
     }
 
@@ -65,9 +62,9 @@ async function masteriesGG(interaction) {
       .addFields(embedInfo)
       .setTimestamp();
 
-    await interaction.editReply({ embeds: [embed] });
+    await i.editReply({ embeds: [embed] });
   } catch (e) {
-    await interaction.editReply("An error has occured..");
+    await i.editReply("An error has occured..");
     console.log(e);
   }
 }

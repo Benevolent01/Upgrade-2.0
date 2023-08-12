@@ -38,7 +38,7 @@ async function handleCollection() {
           properties: {
             _id: { bsonType: "objectId" },
             name: { bsonType: "string" },
-            money: { bsonType: "int" },
+            money: { bsonType: "long" },
             isAdmin: { bsonType: "bool" },
             dateRegistered: { bsonType: "string" },
           },

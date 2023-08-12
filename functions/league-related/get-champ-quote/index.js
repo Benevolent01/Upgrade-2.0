@@ -3,23 +3,20 @@ let { isValidInteraction } = require("../../all-config");
 let { slash_cq } = require("../../slash-commands/config");
 let { filterChampQuote, championsHandleCase } = require("../config");
 
-async function getChampQuote(interaction) {
-  if (
-    !isValidInteraction(interaction) ||
-    interaction.commandName !== slash_cq
-  ) {
+async function getChampQuote(i) {
+  if (!isValidInteraction(i) || i.commandName !== slash_cq) {
     return;
   }
 
-  await interaction.deferReply();
+  await i.deferReply();
 
   // the champion name has to be input (spelled) correctly
-  let champQuery = interaction.options.data[0].value.toLowerCase();
+  let champQuery = i.options.data[0].value.toLowerCase();
 
   if (!championsHandleCase.has(champQuery)) {
     let msg =
       "**" + "That champion doesn't exist, or is spelled otherwise!" + "**";
-    return await interaction.editReply(msg);
+    return await i.editReply(msg);
   }
 
   let correctChampName = championsHandleCase.get(champQuery);
@@ -39,9 +36,9 @@ async function getChampQuote(interaction) {
     let randomIdx = () => Math.floor(Math.random() * quotesArray.length);
 
     let msg = "``" + quotesArray[randomIdx()] + "``";
-    await interaction.editReply(msg);
+    await i.editReply(msg);
   } catch (e) {
-    await interaction.editReply("An error occured..");
+    await i.editReply("An error occured..");
     console.log(e);
   }
 }

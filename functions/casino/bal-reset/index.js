@@ -14,37 +14,34 @@ let clientDb = new MongoClient(uri, {
   },
 });
 
-async function balanceReset(interaction) {
-  if (
-    !isValidInteraction(interaction) ||
-    interaction.commandName !== slash_cas_reset
-  ) {
+async function balanceReset(i) {
+  if (!isValidInteraction(i) || i.commandName !== slash_cas_reset) {
     return;
   }
 
-  await interaction.deferReply();
+  await i.deferReply();
 
   try {
     let currColl = clientDb.db(dbName).collection(collName);
 
-    let user = await currColl.findOne({ name: interaction.user.username });
+    let user = await currColl.findOne({ name: i.user.username });
 
     if (!user) {
-      return await interaction.editReply(
+      return await i.editReply(
         "`You don't have an account yet, start betting and you will!`"
       );
     }
 
     await currColl.findOneAndUpdate(
-      { name: interaction.user.username },
+      { name: i.user.username },
       { $set: { money: initial_amount_ofmoney } }
     );
 
     let embed = new EmbedBuilder();
     embed
       .setColor("Random")
-      .setTitle(`${interaction.guild.name}'s Casino`)
-      .setThumbnail(interaction.member.displayAvatarURL())
+      .setTitle(`${i.guild.name}'s Casino`)
+      .setThumbnail(i.member.displayAvatarURL())
       .addFields(
         { name: `Previous Balance`, value: `${user.money}$`, inline: true },
         {
@@ -58,14 +55,12 @@ async function balanceReset(interaction) {
           inline: false,
         }
       )
-      .setFooter({ text: `${interaction.guild.name}, inc.` })
+      .setFooter({ text: `${i.guild.name}, inc.` })
       .setTimestamp();
 
-    await interaction.editReply({ embeds: [embed] });
+    await i.editReply({ embeds: [embed] });
   } catch (e) {
-    await interaction.editReply(
-      "`There was an error resetting your casino balance..!`"
-    );
+    await i.editReply("`There was an error resetting your casino balance..!`");
     console.log(e);
   }
 }

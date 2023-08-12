@@ -39,6 +39,9 @@ const handleBet = require("./functions/casino/bet");
 const balanceReset = require("./functions/casino/bal-reset");
 const showBalance = require("./functions/casino/my-bal");
 const handleCollection = require("./functions/casino/database/model");
+const hangmanAdd = require("./functions/hangman/add");
+const hangmanGuess = require("./functions/hangman/guess");
+const hangmanReset = require("./functions/hangman/reset");
 
 // --------------------- On ready ---------------------- //
 
@@ -55,13 +58,22 @@ client.on("ready", async () => {
   }
   commands.map((command) => command.toJSON());
 
-  rest.put(
-    Routes.applicationGuildCommands(
-      process.env.BOT_ID,
-      process.env.MAIN_GUILD_ID
-    ),
-    { body: commands }
-  );
+  // register slash commands globally
+  if (process.env.PRODUCTION_ENV) {
+    await rest.put(Routes.applicationCommands(client.application.id), {
+      body: commands,
+    });
+  } else {
+    await rest.put(
+      Routes.applicationGuildCommands(
+        client.application.id,
+        process.env.MAIN_GUILD_ID
+      ),
+      {
+        body: commands,
+      }
+    );
+  }
 });
 
 // --------------------- Moderation ---------------------- //
@@ -99,38 +111,12 @@ client.on("interactionCreate", async (interaction) => showBalance(interaction));
 
 // --------------------- Hangman ---------------------- //
 
-client.on("messageCreate", () => {});
+client.on("interactionCreate", (i) => hangmanAdd(i));
 
-//HangMan
-client.on("interactionCreate", async () => {
-  /*
-  add
-   - initialize the queue
-   - input user WORD and DIFFICULTY
-   - push embed
-   - if not input, delete queue
+client.on("interactionCreate", (i) => hangmanGuess(i));
 
-  guess
-    input character,
-    if the character matches any, show all characters and print message
-    - push embed (shows lives remaining and the word)
+client.on("interactionCreate", async (i) => hangmanReset(i));
 
-  reset
-    - delete the queue
-
-  initially the word is completely hidden, depending to difficulty config:
-
-  easy: show 3 random characters, 20 lives
-  medium: show 2 random characters, 15 lives
-  hard: show 1 random character, 10 lives
-
-  hangmanQ {
-    id: serverId, 
-    word_to_appear: "",
-    lives: Number(),
-    realWord: "",
-  }
-  */
-});
+// --------------------- End ---------------------- //
 
 client.login(process.env.DISCORD_BOT_TOKEN);

@@ -1,14 +1,17 @@
-let IDS_that_should_not_be_banned = [];
+let IDS_that_should_not_be_banned = [
+  "851617435730968578",
+  "751764122458390580",
+  "1140016534371180664",
+];
 
 module.exports = {
   // hours
   timeout_duration: 1000 * 60 * 60,
 
-  shouldProceedWithBan: (interaction) => {
-    let id_arr = (IDS_that_should_not_be_banned ??= []);
+  shouldProceedWithBan: (msg) => {
+    let id_arr = [...IDS_that_should_not_be_banned];
     for (let i = 0; i < id_arr.length; i++) {
-      if (interaction.member.roles.cache.has(id_arr[i]));
-      return false;
+      if (id_arr[i] === msg.member.user.id.toString()) return false;
     }
     return true;
   },

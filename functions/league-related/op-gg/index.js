@@ -3,18 +3,15 @@ let { isValidInteraction } = require("../../all-config");
 let { slash_opgg } = require("../../slash-commands/config");
 let { modifyID, riotHeaders } = require("../config");
 
-async function leagueOpGG(interaction) {
+async function leagueOpGG(i) {
   // only opgg interaction
-  if (
-    !isValidInteraction(interaction) ||
-    interaction.commandName !== slash_opgg
-  ) {
+  if (!isValidInteraction(i) || i.commandName !== slash_opgg) {
     return;
   }
 
-  await interaction.deferReply();
-  let summonerName = interaction.options.data[0].value.toLowerCase();
-  let server = interaction.options.data[1].value.toLowerCase();
+  await i.deferReply();
+  let summonerName = i.options.data[0].value.toLowerCase();
+  let server = i.options.data[1].value.toLowerCase();
   let headers = riotHeaders();
 
   try {
@@ -29,8 +26,8 @@ async function leagueOpGG(interaction) {
 
     // if not id, then don't look further
     if (!id) {
-      return interaction.editReply(
-        `**${interaction.user.username} I couldn't find a summoner with such name!**`
+      return i.editReply(
+        `**${i.user.username} I couldn't find a summoner with such name!**`
       );
     }
 
@@ -102,9 +99,9 @@ async function leagueOpGG(interaction) {
       });
     }
 
-    await interaction.editReply({ embeds: [embed] });
+    await i.editReply({ embeds: [embed] });
   } catch (e) {
-    await interaction.editReply("An error has occured..");
+    await i.editReply("An error has occured..");
     console.log(e);
   }
 }

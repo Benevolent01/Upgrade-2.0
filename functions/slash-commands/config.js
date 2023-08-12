@@ -1,6 +1,5 @@
 let { VALID_SERVERS } = require("../league-related/config");
 
-//invite, quote, get, getall, bet, casinoreset, mybalance
 module.exports = {
   // --------------------- League Related ---------------------- //
 
@@ -56,20 +55,18 @@ module.exports = {
 
   // --------------------- Hangman ---------------------- //
 
-  slash_hangman: "hangman",
-  slash_hangman_desc: "Play hangman on discord!",
-  // add
-  slash_hangman_str_opts: {
-    name: "command-type",
-    desc: "Choose a command for hangman!",
-    req: true,
-    opts: [
-      { name: "ADD", value: "add", desc: "Add a word to play hangman!" },
-      {
-        name: "GUESS",
-        value: "guess",
-        desc: "Make a guess by typing a character!",
-      },
-    ],
-  },
+  // hangman add
+  slash_hm_add: "hm-add",
+  slash_hm_add_desc: "Initialise a word to play hangman!",
+
+  // hangman guess
+  slash_hm_guess: "hm-guess",
+  slash_hm_guess_desc: "Hangman - Guess a character!",
+  // guess option
+  slash_hm_guess_opt: "guess",
+  slash_hm_guess_opt_desc: "Input a character to guess!",
+
+  // hangman reset
+  slash_hm_reset: "hm-reset",
+  slash_hm_reset_desc: "Reset the queue for hangman",
 };

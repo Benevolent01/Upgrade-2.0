@@ -19,9 +19,14 @@ let {
   slash_bal_desc,
   slash_cas_reset,
   slash_cas_reset_desc,
-  slash_hangman,
-  slash_hangman_desc,
-  slash_hangman_str_opts,
+  slash_hm_add_desc,
+  slash_hm_add,
+  slash_hm_guess,
+  slash_hm_guess_desc,
+  slash_hm_reset,
+  slash_hm_reset_desc,
+  slash_hm_guess_opt_desc,
+  slash_hm_guess_opt,
 } = require("./config");
 
 module.exports = {
@@ -102,22 +107,23 @@ module.exports = {
     .setDescription(slash_cas_reset_desc),
 
   // --------------------- Hangman ---------------------- //
+  hangman_add: new SlashCommandBuilder()
+    .setName(slash_hm_add)
+    .setDescription(slash_hm_add_desc),
 
-  hangman: new SlashCommandBuilder()
-    .setName(slash_hangman)
-    .setDescription(slash_hangman_desc)
-    .addStringOption((opt) => {
-      let { name, desc, req, opts } = slash_hangman_str_opts;
-      return opt
-        .setName(name)
-        .setDescription(desc)
-        .setRequired(req)
-        .addChoices(
-          ...opts.map((obj) => ({
-            name: obj.name,
-            value: obj.value,
-            desc: obj.desc,
-          }))
-        );
-    }),
+  hangman_guess: new SlashCommandBuilder()
+    .setName(slash_hm_guess)
+    .setDescription(slash_hm_guess_desc)
+    .addStringOption((opt) =>
+      opt
+        .setName(slash_hm_guess_opt)
+        .setDescription(slash_hm_guess_opt_desc)
+        .setRequired(true)
+        .setMaxLength(1)
+        .setMinLength(1)
+    ),
+
+  hangman_reset: new SlashCommandBuilder()
+    .setName(slash_hm_reset)
+    .setDescription(slash_hm_reset_desc),
 };

@@ -19,23 +19,20 @@ let clientDb = new MongoClient(uri, {
   },
 });
 
-async function showBalance(interaction) {
-  if (
-    !isValidInteraction(interaction) ||
-    interaction.commandName !== slash_balance
-  ) {
+async function showBalance(i) {
+  if (!isValidInteraction(i) || i.commandName !== slash_balance) {
     return;
   }
 
-  await interaction.deferReply();
+  await i.deferReply();
 
   try {
     let currColl = clientDb.db(dbName).collection(collName);
 
-    let user = await currColl.findOne({ name: interaction.user.username });
+    let user = await currColl.findOne({ name: i.user.username });
 
     if (!user) {
-      return await interaction.editReply(
+      return await i.editReply(
         "`You don't have an account yet, start betting and you will!`"
       );
     }
@@ -43,8 +40,8 @@ async function showBalance(interaction) {
     let embed = new EmbedBuilder();
     embed
       .setColor("Random")
-      .setTitle(`${interaction.guild.name}'s Casino`)
-      .setThumbnail(interaction.member.displayAvatarURL())
+      .setTitle(`${i.guild.name}'s Casino`)
+      .setThumbnail(i.member.displayAvatarURL())
       .addFields(
         { name: `Current balance`, value: `${user.money}$ 💰`, inline: true },
         {
@@ -52,12 +49,12 @@ async function showBalance(interaction) {
           value: `with a multiplier of ${jackpotMultiplier}x`,
         }
       )
-      .setFooter({ text: `${interaction.guild.name}, inc.` })
+      .setFooter({ text: `${i.guild.name}, inc.` })
       .setTimestamp();
 
-    await interaction.editReply({ embeds: [embed] });
+    await i.editReply({ embeds: [embed] });
   } catch (e) {
-    await interaction.editReply("`There was an error showing your balance..!`");
+    await i.editReply("`There was an error showing your balance..!`");
     console.log(e);
   }
 }

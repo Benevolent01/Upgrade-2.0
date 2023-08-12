@@ -14,7 +14,7 @@ async function moderateChat(msg) {
     return;
   }
 
-  if (!containsBadWord(msg, mp) || !shouldProceedWithBan()) {
+  if (!containsBadWord(msg, mp) || !shouldProceedWithBan(msg)) {
     return;
   }
 

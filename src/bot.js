@@ -25,23 +25,23 @@ let { REST } = require("@discordjs/rest");
 let { Routes } = require("discord-api-types/v9");
 
 // ---------------------------------------------- //
-let slashCommands = require("./functions/slash-commands");
+let slashCommands = require("./slash-commands");
 const {
   BOT_PRESENCE_STATUS,
   BOT_ACTIVITY_DESC,
   BOT_ACTIVITY_TYPE,
-} = require("./functions/all-config");
-const moderateChat = require("./functions/chat-moderation");
-const leagueOpGG = require("./functions/league-related/op-gg");
-const masteriesGG = require("./functions/league-related/masteries-gg");
-const getChampQuote = require("./functions/league-related/get-champ-quote");
-const handleBet = require("./functions/casino/bet");
-const balanceReset = require("./functions/casino/bal-reset");
-const showBalance = require("./functions/casino/my-bal");
-const handleCollection = require("./functions/casino/database/model");
-const hangmanAdd = require("./functions/hangman/add");
-const hangmanGuess = require("./functions/hangman/guess");
-const hangmanReset = require("./functions/hangman/reset");
+} = require("./all-config");
+const moderateChat = require("./chat-moderation");
+const leagueOpGG = require("./league-related/op-gg");
+const masteriesGG = require("./league-related/masteries-gg");
+const getChampQuote = require("./league-related/get-champ-quote");
+const handleBet = require("./casino/bet");
+const balanceReset = require("./casino/bal-reset");
+const showBalance = require("./casino/my-bal");
+const handleCollection = require("./casino/database/model");
+const hangmanAdd = require("./hangman/add");
+const hangmanGuess = require("./hangman/guess");
+const hangmanReset = require("./hangman/reset");
 
 // --------------------- On ready ---------------------- //
 
